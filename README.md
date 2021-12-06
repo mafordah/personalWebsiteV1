@@ -1,2 +1,2 @@
 # Personal Website and Portfolio
-Miya Fordah's Person Website
+Miya Fordah's Personal Website
