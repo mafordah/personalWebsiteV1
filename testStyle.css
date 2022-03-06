@@ -1,0 +1,45 @@
+html,
+body {
+    margin: 0;
+    font-family: 'Jost', Arial, Helvetica, sans-serif;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+h2 {
+    text-transform: uppercase;
+}
+
+.container {
+    max-width: 70%;
+    min-width: 300px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.work {
+    width: 33%;
+    min-width: 300px;
+    filter: grayscale(1);
+    transition: filter 0.5s;
+}
+
+.work:hover {
+    filter: grayscale(0.0);
+}
+
+@media only screen and (max-width: 768px) {
+    .workContainer {
+        max-width: 100%;
+    }
+    .work {
+        width: 100%;
+    }
+    .workContainer {
+        width: 100%;
+    }
+}
