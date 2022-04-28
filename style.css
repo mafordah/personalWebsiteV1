@@ -2,6 +2,8 @@ html {
     background-color: #f0f0f0;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    overflow-x: none;
+
 }
 
 html::-webkit-scrollbar {
@@ -14,7 +16,6 @@ html, body {
 }
 
 
-
 nav {
     color: #404040;
     font-size: 18pt;
@@ -23,19 +24,19 @@ nav {
 }
 
 #mainNav {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     justify-content: center;
     padding: 30px;
 }
 
-#mainNav a:hover{
+#mainNav a:hover {
     cursor: pointer;
     text-decoration: line-through;
 }
 
-#mainNav a:active{
+#mainNav a:active {
     text-decoration: line-through;
 }
 
@@ -59,44 +60,26 @@ canvas {
     text-align: right;
 }
 
-.shape {}
+/* Shapes */
+.shape {
+    mix-blend-mode:exclusion;
+    filter: grayscale(100%);
+    opacity: 0;
+    background-size: cover;
+    background-position-x: center;
+    background-position-y: center;
+    border-radius: 50%;
+
+    /* box-shadow: 2px 5px 2px rgba(253, 233, 233, 0.275); */
+}
 
 #bounds {
-    position: fixed;
     background-color: rgb(255, 251, 235);
-    mix-blend-mode: exclusion;
-
-    /* border: 10px solid rgb(255, 251, 235); */
-
-    /* border: 1.5px lightcoral dashed; */
     border-radius: 50%;
-    top: 0;
-    left: 0;
-    max-width: "300px";
-    width: 30%;
-    height: 13%;
+    opacity: 1;
 }
 
-#entry {
-    color: rgba(0, 0, 0, 0);
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-/* Shapes */
-
-.shape {
-    background-color: rgb(179, 179, 179);
-}
-
-#shape1 {
-    width: 20vh;
-    height: 20vh;
-    border-radius: 50%;
-}
-
-/* Image Classes */
+/* Images */
 #headerLogo {
     display: none;
     opacity: 0;
@@ -106,7 +89,7 @@ canvas {
 }
 
 
-/* Text Classes */
+/* Text */
 h1 {
     font-family: 'Josefin Sans', Arial, Helvetica, sans-serif;
     text-align: center;

@@ -17,10 +17,16 @@ const width = 4.5;
 var setRotate = true;
 var entered = false;
 
-//Div for spline click boundary
+//Main shape div wiht control effects
 var bounds = document.getElementById("bounds");
-var boundHeight = 0.13
-bounds.style.width = (window.innerHeight * boundHeight).toString() + "px"; //intial height
+
+gsap.set(".shape", {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    xPercent: -50,
+    yPercent: -50,
+})
 
 // var entryText = document.getElementById("entry");
 
@@ -31,7 +37,6 @@ let insetWidth;
 let insetHeight;
 
 var spline = new THREE.CatmullRomCurve3(points, false, "catmullrom", 1.0);
-
 
 init();
 animate();
@@ -168,21 +173,21 @@ function drawPage() {
     // ];
 
     var signature = [
-        { x: -48, y: 0, z: 0 },
-        { x: -36, y: 0, z: 0 },
-        { x: -30, y: 0, z: 0 },
-        { x: -24, y: 0, z: 0 },
-        { x: -18, y: 0, z: 0 },
-        { x: -12, y: 0, z: 0 },
-        { x: -6, y: 0, z: 0 },
-        { x: -0, y: 0, z: 0 },
-        { x: 6, y: 0, z: 0 },
-        { x: 12, y: 0, z: 0 },
-        { x: 18, y: 0, z: 0 },
-        { x: 24, y: 0, z: 0 },
-        { x: 36, y: 0, z: 0 },
-        { x: 48, y: 0, z: 0 },
-        { x: 54, y: 0, z: 0 },
+        { x: -48, y: -13, z: 0 },
+        { x: -36, y: -13, z: 0 },
+        { x: -30, y: -13, z: 0 },
+        { x: -24, y: -13, z: 0 },
+        { x: -18, y: -13, z: 0 },
+        { x: -12, y: -13, z: 0 },
+        { x: -6, y: -13, z: 0 },
+        { x: -0, y: -13, z: 0 },
+        { x: 6, y: -13, z: 0 },
+        { x: 12, y: -13, z: 0 },
+        { x: 18, y: -13, z: 0 },
+        { x: 24, y: -13, z: 0 },
+        { x: 36, y: -13, z: 0 },
+        { x: 48, y: -13, z: 0 },
+        { x: 54, y: -13, z: 0 },
     ];
 
 
@@ -232,7 +237,7 @@ function drawPage() {
 
 function onWindowResize() {
     //Reset bounds of spline
-    bounds.style.width = (window.innerHeight * boundHeight).toString() + "px";
+    // bounds.style.width = (window.innerHeight * boundHeight).toString() + "px";
 
     //Adjust scene to window resize
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -277,15 +282,14 @@ function animate() {
     matLine.resolution.set(insetWidth, insetHeight); // resolution of the inset viewport
     renderer.setScissorTest(false);
 
-    // tempV.set(spline.position);
-    tempV.project(camera);
+    // // tempV.set(spline.position);
+    // tempV.project(camera);
 
-    // Convert the normalized position to CSS coordinates
-    const x = (tempV.x * .5 + .5) * window.innerWidth;
-    const y = (tempV.y * -.5 + .5) * window.innerHeight;
+    // // Convert the normalized position to CSS coordinates
+    // const x = (tempV.x * .5 + .5) * window.innerWidth;
+    // const y = (tempV.y * -.5 + .5) * window.innerHeight;
 
-    // Move elements with camera to center
-    // bounds.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`;
+    // // Move elements with camera to center
     // bounds.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`;
 
 }
@@ -305,10 +309,11 @@ let mainTl = gsap.timeline({
     scrollTrigger: {
         trigger: ".header",
         start: "top top",
-        end: "1000",
+        end: "3000",
         pin: true,
         scrub: 1,
         markers: true,
+        invalidateOnRefresh: true
     },
 });
 
@@ -319,17 +324,167 @@ mainTl
     .to(".header", 2, { alignItems: "flex-start", justifyContent: "left", paddingLeft: "30px", height: "50px" })
     .to("#headerLogo", 2, { display: "block", opacity: 1 }, "<")
     .to(".title", 2, { color: "#404040" }, "<")
-    .to("#aboutLink", 1, {textDecoration: "line-through"}, "<")
+    .to("#aboutLink", 2, { textDecoration: "line-through" }, "<")
+    .delay(8)
+
 
     //Work
-    .to("#bounds", 4, { borderRadius: "0px", height: "55%",})
+    //show 0
+    .fromTo("#bounds", 4,
+        { width: (window.innerHeight * 0.13).toString() + "px", height: "13%" },
+        { backgroundImage: "url(./assets/images/anomalyCoverImage.png)", borderRadius: "0px", width: "10em", height: "55%" })
+    .fromTo("#shape1", 2,
+        {
+            backgroundImage: "url(./assets/images/testImage.jpg)",
+            borderRadius: "5px",
+            width: "0em",
+            height: "50%",
+            x: 120,
+            y: -20
+        }
+        , {
+            borderRadius: "0px",
+            width: "8em",
+            opacity: 1,
+            x: 180,
+            y: 0,
+        }
+        , "<70%")
+    .to("#shape2",
+        {
+            backgroundImage: "url(./assets/images/ringCoverImage.png)",
+            borderRadius: "0px",
+            width: "6em",
+            height: "45%",
+            opacity: 0,
+            x: 0,
+            y: 0,
+        }, "<")
+    .fromTo("#shape3", 2,
+        {
+            backgroundImage: "url(./assets/images/testImage.jpg)",
+            borderRadius: "5px",
+            width: "0em",
+            height: "50%",
+            x: -120,
+            y: -20
+        }
+        , {
+            borderRadius: "0px",
+            width: "8em",
+            opacity: 1,
+            x: -180,
+            y: 0
+        }
+        , "<")
     .to(spline, 4, { tension: 3.0 }, "<")
-    .to("#workLink", 1, {textDecoration: "line-through"}, "<")
+    .to("#workLink", 4, { textDecoration: "line-through" }, "<")
+
+    //show 1
+    .to("#shape1", 4,
+        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
+    .to("#shape2", 4,
+        { borderRadius: "0px", width: "8em", height: "50%", opacity: 1, x: 180, y: 0, }
+        , "<")
+    .to("#shape3", 4,
+        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0, }
+        , "<")
+    .to("#bounds", 2,
+        { width: "8em", height: "50%", opacity: 1, x: -180, y: 0 }
+        , "<")
+
+    //show 2
+    .to("#shape2", 4,
+        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
+    .to("#shape3", 4,
+        { borderRadius: "0px", width: "8em", height: "50%", opacity: 1, x: 180, y: 0, }
+        , "<")
+    .to("#bounds", 4,
+        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0, }
+        , "<")
+    .to("#shape1", 4,
+        { width: "8em", height: "50%", opacity: 1, x: -180, y: 0 }
+        , "<")
+
+    //show 3
+    .to("#shape3", 4,
+        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
+    .to("#bounds", 4,
+        { borderRadius: "0px", width: "8em", height: "50%", opacity: 1, x: 180, y: 0, }
+        , "<")
+    .to("#shape1", 4,
+        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0, }
+        , "<")
+    .to("#shape2", 4,
+        { width: "8em", height: "50%", opacity: 1, x: -180, y: 0 }
+        , "<")
+
+    //End
+    .to("#bounds", 4,
+        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, })
+    .to("#shape1", 4,
+        { borderRadius: "0px", width: "8em", height: "50%", opacity: 0, x: 0, y: 0 }
+        , "<")
+    .to("#shape2", 4,
+        { width: "6em", height: "45%", opacity: 0, x: -180, y: 0 }
+        , "<")
+    .to("#shape3", 4,
+        { width: "8em", height: "50%", opacity: 0, x: 0, y: 0, }
+        , "<")
+
 
     //Contact
-    .to("#bounds", 4, { borderRadius: "8em", width: "16em", height: "16em", x: -200, y: -200, rotation: 45 })
+    .to(bounds, 4, { borderRadius: "6em", width: "12em", height: "12em", x: -80, y: -80, rotation: 45 }, "<")
     .to(spline, 4, { tension: 0.0 }, "<")
-    .to("#contactLink", 1, {textDecoration: "line-through"}, "<")
+    .to("#contactLink", 4, { textDecoration: "line-through" }, "<")
+    .fromTo("#shape1", 4,
+        {
+            backgroundImage: "url(./assets/images/testImage.jpg)",
+            borderRadius: "50%",
+            width: "0em",
+            height: "0em",
+            x: 100,
+            y: -10
+        }
+        , {
+            width: "8em",
+            height: "8em",
+            opacity: 1,
+        })
+    .fromTo("#shape2", 4,
+        {
+            backgroundImage: "url(./assets/images/ringCoverImage.png)",
+            borderRadius: "3em",
+            width: "0em",
+            height: "0em",
+            opacity: 0,
+            x: 30,
+            y: 110,
+        }
+        , {
+            width: "5em",
+            height: "5em",
+            opacity: 1,
+        },
+        "<50%")
+    .fromTo("#shape3", 4,
+        {
+            backgroundImage: "url(./assets/images/testImage.jpg)",
+            borderRadius: "2em",
+            width: "0em",
+            height: "0em",
+            opacity: 0,
+            x: -90,
+            y: 90
+        }
+        , {
+            width: "4em",
+            height: "4em",
+            opacity: 1,
+        }
+        , "<50%")
+    .delay(8)
+
 
 
 
@@ -357,6 +512,10 @@ window.addEventListener("click", e => {
     }
 });
 
+document.getElementById("aboutLink").addEventListener("click", e => {
+
+})
+
 bounds.addEventListener("mouseover", enter);
 bounds.addEventListener("mouseout", exit);
 
@@ -366,6 +525,7 @@ document.getElementById("workLink").addEventListener("mouseover", function () { 
 document.getElementById("workLink").addEventListener("mouseout", function () { gsap.to(spline, { tension: 1.0 }); });
 document.getElementById("contactLink").addEventListener("mouseover", function () { gsap.to(spline, { tension: 0.0 }); });
 document.getElementById("contactLink").addEventListener("mouseout", function () { gsap.to(spline, { tension: 1.0 }); });
+
 
 
 
