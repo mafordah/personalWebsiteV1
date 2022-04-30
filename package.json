@@ -1,0 +1,15 @@
+{
+  "name": "personal-website",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "@parcel/resolver-glob": "^2.5.0",
+    "parcel": "latest"
+  },
+  "dependencies": {
+    "three": "^0.139.2"
+  }
+}
