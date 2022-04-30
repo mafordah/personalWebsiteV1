@@ -63,7 +63,6 @@ canvas {
 /* Shapes */
 .shape {
     mix-blend-mode:exclusion;
-    filter: grayscale(100%);
     opacity: 0;
     background-size: cover;
     background-position-x: center;
@@ -95,7 +94,7 @@ h1 {
     text-align: center;
     color: #404040;
     /* color: #d1d1d1; */
-    font-size: 18vh;
+    font-size: 20vh;
     font-weight: 100;
     text-transform: uppercase;
 }

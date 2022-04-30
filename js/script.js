@@ -13,7 +13,7 @@ const points = [];
 const pointNumber = 15;
 const geometry = new LineGeometry();
 const shadowGeometry = new LineGeometry();
-const width = 4.5;
+const splineWidth = 6;
 var setRotate = true;
 var entered = false;
 
@@ -57,7 +57,7 @@ function init() {
 
 
     for (let i = 0, j = pointNumber; i < j; i++) {
-        points.push(new THREE.Vector3(gsap.utils.random(-width, width), gsap.utils.random(-width, width), gsap.utils.random(-width, width)));
+        points.push(new THREE.Vector3(gsap.utils.random(-splineWidth, splineWidth), gsap.utils.random(-splineWidth, splineWidth), gsap.utils.random(-splineWidth, splineWidth)));
     }
 
 
@@ -138,9 +138,9 @@ function getNewPosition() {
         for (let i = 0, j = pointNumber; i < j; i++) {
             gsap.to(points[i], {
                 duration: durationSec,
-                x: gsap.utils.random(-width, width),
-                y: gsap.utils.random(-width, width),
-                z: gsap.utils.random(-width, width),
+                x: gsap.utils.random(-splineWidth, splineWidth),
+                y: gsap.utils.random(-splineWidth, splineWidth),
+                z: gsap.utils.random(-splineWidth, splineWidth),
                 ease: "rough({ template: none.out, strength: 1, points: 10, taper: none, randomize: true, clamp: true})",
             });
         }
@@ -282,6 +282,7 @@ function animate() {
     matLine.resolution.set(insetWidth, insetHeight); // resolution of the inset viewport
     renderer.setScissorTest(false);
 
+    // Data for moving elements with three camera
     // // tempV.set(spline.position);
     // tempV.project(camera);
 
@@ -299,7 +300,7 @@ function animate() {
 window.addEventListener("mousemove", e => {
     //Smooth move
     if (!entered) {
-        gsap.to(scene.position, { x: (e.pageX - window.innerWidth / 2) * (0.001), y: (e.pageY - window.innerHeight / 2) * (-0.001) });
+        gsap.to(scene.position, { x: () => (e.pageX - window.innerWidth / 2) * (0.001), y: () => (e.pageY - window.innerHeight / 2) * (-0.001) });
     }
 });
 
@@ -312,26 +313,32 @@ let mainTl = gsap.timeline({
         end: "3000",
         pin: true,
         scrub: 1,
+        snap: {
+            snapTo: "labelsDirectional", // snap to the closest label in the timeline in the direction of scroll
+            duration: { min: 0.2, max: 1 }, // the snap animation should be at least 1 second, but no more than 2 seconds (determined by velocity)
+            ease: "power1.inOut"
+        },
         markers: true,
         invalidateOnRefresh: true
     },
 });
 
 mainTl
+    .addLabel("start")
+
     //About
-    .to(".title", 1, { color: "rgba(0,0,0,0)" }, "<")
-    .to(".title", 0.5, { fontSize: "30px", fontWeight: "400", textAlign: "left" })
-    .to(".header", 2, { alignItems: "flex-start", justifyContent: "left", paddingLeft: "30px", height: "50px" })
+    .to(".title", 1, { color: "rgba(0,0,0,0)" })
+    .fromTo(".title", 0.5, { fontSize: "20vh", fontWeight: "100", textAlign: "center" }, { fontSize: "30px", fontWeight: "400", textAlign: "left" })
+    // .to(".header", 2, { alignItems: "flex-start", justifyContent: "left", paddingLeft: "30px", height: "50px" })
     .to("#headerLogo", 2, { display: "block", opacity: 1 }, "<")
     .to(".title", 2, { color: "#404040" }, "<")
     .to("#aboutLink", 2, { textDecoration: "line-through" }, "<")
-    .delay(8)
+    .addLabel("about")
 
 
     //Work
-    //show 0
     .fromTo("#bounds", 4,
-        { width: (window.innerHeight * 0.13).toString() + "px", height: "13%" },
+        { width: () => (window.innerHeight * 0.13).toString() + "px", height: "13%" },
         { backgroundImage: "url(./assets/images/anomalyCoverImage.png)", borderRadius: "0px", width: "10em", height: "55%" })
     .fromTo("#shape1", 2,
         {
@@ -347,7 +354,7 @@ mainTl
             width: "8em",
             opacity: 1,
             x: 180,
-            y: 0,
+            y: 0
         }
         , "<70%")
     .to("#shape2",
@@ -358,7 +365,7 @@ mainTl
             height: "45%",
             opacity: 0,
             x: 0,
-            y: 0,
+            y: 0
         }, "<")
     .fromTo("#shape3", 2,
         {
@@ -379,111 +386,74 @@ mainTl
         , "<")
     .to(spline, 4, { tension: 3.0 }, "<")
     .to("#workLink", 4, { textDecoration: "line-through" }, "<")
+    .addLabel("work")
+
 
     //show 1
     .to("#shape1", 4,
-        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
+        { width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
     .to("#shape2", 4,
-        { borderRadius: "0px", width: "8em", height: "50%", opacity: 1, x: 180, y: 0, }
+        { width: "8em", height: "50%", opacity: 1, x: 180, y: 0 }
         , "<")
     .to("#shape3", 4,
-        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0, }
+        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0 }
         , "<")
     .to("#bounds", 2,
         { width: "8em", height: "50%", opacity: 1, x: -180, y: 0 }
         , "<")
+    .addLabel("work0")
+
 
     //show 2
     .to("#shape2", 4,
-        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
+        { width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
     .to("#shape3", 4,
-        { borderRadius: "0px", width: "8em", height: "50%", opacity: 1, x: 180, y: 0, }
+        { width: "8em", height: "50%", opacity: 1, x: 180, y: 0 }
         , "<")
     .to("#bounds", 4,
-        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0, }
+        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0 }
         , "<")
     .to("#shape1", 4,
         { width: "8em", height: "50%", opacity: 1, x: -180, y: 0 }
         , "<")
+    .addLabel("work1")
+
 
     //show 3
     .to("#shape3", 4,
-        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
+        { width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
     .to("#bounds", 4,
-        { borderRadius: "0px", width: "8em", height: "50%", opacity: 1, x: 180, y: 0, }
+        { width: "8em", height: "50%", opacity: 1, x: 180, y: 0 }
         , "<")
     .to("#shape1", 4,
-        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0, }
+        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0 }
         , "<")
     .to("#shape2", 4,
         { width: "8em", height: "50%", opacity: 1, x: -180, y: 0 }
         , "<")
+    .addLabel("work2")
 
-    //End
+
+    //end
     .to("#bounds", 4,
-        { borderRadius: "0px", width: "10em", height: "55%", opacity: 1, })
+        { width: "10em", height: "55%", opacity: 1, x: 0, y: 0 })
     .to("#shape1", 4,
-        { borderRadius: "0px", width: "8em", height: "50%", opacity: 0, x: 0, y: 0 }
+        { width: "8em", height: "50%", opacity: 0, x: 180, y: 0, }
         , "<")
     .to("#shape2", 4,
-        { width: "6em", height: "45%", opacity: 0, x: -180, y: 0 }
+        { width: "6em", height: "45%", opacity: 0, x: 0, y: 0 }
         , "<")
     .to("#shape3", 4,
-        { width: "8em", height: "50%", opacity: 0, x: 0, y: 0, }
+        { width: "8em", height: "50%", opacity: 0, x: -180, y: 0, }
         , "<")
 
 
     //Contact
-    .to(bounds, 4, { borderRadius: "6em", width: "12em", height: "12em", x: -80, y: -80, rotation: 45 }, "<")
+    .to(bounds, 4, { borderRadius: "6em", width: "12em", height: "12em", x: -80, y: -80, rotation: 45 })
     .to(spline, 4, { tension: 0.0 }, "<")
     .to("#contactLink", 4, { textDecoration: "line-through" }, "<")
-    .fromTo("#shape1", 4,
-        {
-            backgroundImage: "url(./assets/images/testImage.jpg)",
-            borderRadius: "50%",
-            width: "0em",
-            height: "0em",
-            x: 100,
-            y: -10
-        }
-        , {
-            width: "8em",
-            height: "8em",
-            opacity: 1,
-        })
-    .fromTo("#shape2", 4,
-        {
-            backgroundImage: "url(./assets/images/ringCoverImage.png)",
-            borderRadius: "3em",
-            width: "0em",
-            height: "0em",
-            opacity: 0,
-            x: 30,
-            y: 110,
-        }
-        , {
-            width: "5em",
-            height: "5em",
-            opacity: 1,
-        },
-        "<50%")
-    .fromTo("#shape3", 4,
-        {
-            backgroundImage: "url(./assets/images/testImage.jpg)",
-            borderRadius: "2em",
-            width: "0em",
-            height: "0em",
-            opacity: 0,
-            x: -90,
-            y: 90
-        }
-        , {
-            width: "4em",
-            height: "4em",
-            opacity: 1,
-        }
-        , "<50%")
-    .delay(8)
+    .addLabel("end")
+
 
 
 
@@ -531,19 +501,16 @@ document.getElementById("contactLink").addEventListener("mouseout", function () 
 
 function enter() {
     rotateSpeed = 0.03;
-    // gsap.to(spline, { tension: 2.0 });
 }
 
 function exit() {
     rotateSpeed = 0.01;
-    // gsap.to(spline, { tension: 1.0 });
 }
 
 function enterClick() {
     entered = true;
     setRotate = false;
     drawPage();
-    // bounds.style.display = "none";
 }
 
 function isTouchDevice() {
