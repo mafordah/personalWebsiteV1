@@ -1191,7 +1191,7 @@ document.getElementById("contactLink").addEventListener("click", (e)=>{
 });
 let shapes = document.getElementsByClassName("shape");
 for(let i = 0; i < shapes.length; i++)shapes[i].addEventListener("click", (e)=>{
-    enterClick();
+    // enterClick();
     if (enabled) {
         mainTl.scrollTrigger.disable(false, false);
         gsap.to(shapes[i], 1, {
