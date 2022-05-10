@@ -834,6 +834,7 @@ let mainTl = gsap.timeline({
             ease: "power1.inOut"
         },
         markers: true,
+        fastScrollEnd: true,
         invalidateOnRefresh: true
     }
 });
@@ -861,7 +862,7 @@ mainTl.addLabel("start")//About
 }, "<").to("#aboutLink", 2, {
     textDecoration: "line-through"
 }, "<").addLabel("about")//Work
-.fromTo("#bounds", 4, {
+.fromTo("#bounds", 1, {
     width: ()=>(window.innerHeight * 0.13).toString() + "px"
     ,
     height: "13%"
@@ -875,8 +876,8 @@ mainTl.addLabel("start")//About
     borderRadius: "5px",
     width: "0em",
     height: "50%",
-    x: 120,
-    y: -20
+    x: 180,
+    y: 0
 }, {
     borderRadius: "0px",
     width: "8em",
@@ -896,8 +897,8 @@ mainTl.addLabel("start")//About
     borderRadius: "5px",
     width: "0em",
     height: "50%",
-    x: -120,
-    y: -20
+    x: -180,
+    y: 0
 }, {
     borderRadius: "0px",
     width: "8em",
@@ -927,7 +928,7 @@ mainTl.addLabel("start")//About
     opacity: 0,
     x: 0,
     y: 0
-}, "<").to("#bounds", 2, {
+}, "<").to("#bounds", 4, {
     width: "8em",
     height: "50%",
     opacity: 1,
@@ -984,19 +985,13 @@ mainTl.addLabel("start")//About
     x: -180,
     y: 0
 }, "<").addLabel("work2")//end
-.to("#bounds", 4, {
-    width: "10em",
-    height: "55%",
-    opacity: 1,
-    x: 0,
-    y: 0
-}).to("#shape1", 4, {
+.to("#shape1", 4, {
     width: "8em",
     height: "50%",
     opacity: 0,
     x: 180,
     y: 0
-}, "<").to("#shape2", 4, {
+}).to("#shape2", 4, {
     width: "6em",
     height: "45%",
     opacity: 0,
@@ -1009,14 +1004,14 @@ mainTl.addLabel("start")//About
     x: -180,
     y: 0
 }, "<")//Contact
-.to(bounds, 4, {
+.to(bounds, 2, {
     borderRadius: "6em",
     width: "12em",
     height: "12em",
     x: -80,
     y: -80,
     rotation: 45
-}).to(spline, 4, {
+}, "<").to(spline, 4, {
     tension: 0.0
 }, "<").to("#contactLink", 4, {
     textDecoration: "line-through"
@@ -1030,7 +1025,10 @@ window.addEventListener("keypress", (e)=>{
 });
 window.addEventListener("click", (e)=>{
     //allow for fullscreen click entry
-    if (!entered) enterClick();
+    if (!entered) // enterClick();
+    // function() {
+    // var pos = mainTl.start + (mainTl.end - mainTl.start) *);
+    console.log(mainTl.labels.work2 / mainTl.duration() * 3000 - 50);
 });
 document.getElementById("aboutLink").addEventListener("click", (e)=>{});
 bounds.addEventListener("mouseover", enter);
